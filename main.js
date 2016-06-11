@@ -17,7 +17,7 @@ if (!SLACK_ACCESS_TOKEN) {
 var slackApp = SlackApp.create(SLACK_ACCESS_TOKEN); //SlackApp インスタンスの取得
 
 /* ファイルを削除(SlackAppに該当メソッドが未実装のため独自に追加) */
-function deleteFile(Id){
+function filesDelete(Id){
   var url = "https://slack.com/api/files.delete?";
   var token = "token=" + SLACK_ACCESS_TOKEN;
   var file = "file=" + Id + '';

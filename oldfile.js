@@ -11,7 +11,7 @@ function FileExecuter(){
     if(keyList[i].match(/RANDOM/)){
       var Name = PropertiesService.getScriptProperties().getProperty(keyList[i]);
       Logger.log("Processing " + Name);
-      getOldFile(Name);
+      deleteOldFile(Name);
     }
   }
 }
@@ -31,7 +31,7 @@ function deleteOldFile(Name) {
   var file_num = slackApp.filesList({channel: channelId, ts_to: until}).files.length;
   for(var i=0;i<file_num;++i){
     var fileId = slackApp.filesList({channel: channelId, ts_to: until}).files[i].id;
-    deleteFile("fileId");
+    filesDelete(fileId);
   }
 }
 
