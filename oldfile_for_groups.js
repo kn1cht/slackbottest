@@ -6,10 +6,7 @@ oldfile_for_groups.gs 指定したグループの古いファイルを検出し�
 
 /* 雑談グループを指定 */
 function FileExecuter_gr(){
-  randomList = ["_genkai"]
-  for(i=0;i<randomList.length;++i){
-    getOldFile(randomList[i]);
-  }
+
 }
 
 /* 特定日数より以前のファイルを検出 */

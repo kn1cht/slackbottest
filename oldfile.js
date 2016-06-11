@@ -4,11 +4,15 @@ oldfile.gs 指定したチャンネルの古いファイルを検出します。
   + 古いファイルの削除(ファイルが消えても問題ない雑談チャンネル向け)
 **************************************************/
 
-/* 雑談チャンネルを指定 */
+/* 雑談チャンネルの名称を検索して古いファイルの検索に使用 */
 function FileExecuter(){
-  randomList = ["random_2016"]
-  for(i=0;i<randomList.length;++i){
-    getOldFile(randomList[i]);
+  var keyList = PropertiesService.getScriptProperties().getKeys();
+  for(i=0;i<keyList.length;++i){
+    if(keyList[i] === "RANDOM_CH"){
+      var name = PropertiesService.getScriptProperties().getProperty(keyList[i])
+      Logger.log("Processing " + name);
+      getOldFile(name);
+    }
   }
 }
 
