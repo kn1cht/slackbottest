@@ -2,27 +2,32 @@
 oldfile.gs 指定したチャンネルの古いファイルを検出・削除します。
 ファイルが消えても問題ない雑談チャンネル向け。
 
+# 使い方
++ 「スクリプトのプロパティ」に検索対象のチャンネル(プライベートチャンネル)名を登録しておきます。
++ その際、キーは"Oldfile"を含んだ文字列としてください。
++ oldFileExecuter()のdays変数に指定したい日数を入れておきます。
++ oldFileExecuter()を実行するとファイル削除が実行されます。ログを確認しておきましょう。
 **************************************************/
 
-/* 雑談チャンネル・グループの名称を検索して古いファイルの検索に使用 */
-function FileExecuter(){
+/* 雑談チャンネル・グループの名称を検索して古いファイルを削除 */
+function oldFileExecuter(){
+  var days = 40;  // 遡る日数(ユーザが指定)
   var keyList = PropertiesService.getScriptProperties().getKeys();
   for(i=0;i<keyList.length;++i){
-    if(keyList[i].match(/RANDOM/)){
-      var Name = PropertiesService.getScriptProperties().getProperty(keyList[i]);
-      Logger.log("Processing " + Name);
-      deleteOldFile(Name);
+    if(keyList[i].match(/Oldfile/)){
+      var name = PropertiesService.getScriptProperties().getProperty(keyList[i]);
+      Logger.log("Processing " + name);
+      deleteOldFile(days, name);
     }
   }
 }
 
-/* 特定日数より以前のファイルを削除 */
-function deleteOldFile(Name) {
-  var channelId = channelNametoId(Name);
-  if(!channelId) channelId = groupNametoId(Name); //チャンネルで該当なしであればグループを探す
+/* 指定チャンネル内・特定日数より以前のファイルを削除 */
+function deleteOldFile(name,days) {
+  var channelId = channelNametoId(name);
+  if(!channelId) channelId = groupNametoId(name); //チャンネルで該当なしであればグループを探す
   if(!channelId) return -1; //グループでもなければ終了
 
-  var days = 40;  // 遡る日数(ユーザが指定)
   var date = new Date();
   var now = Math.floor(date.getTime()/ 1000); // unixtime[second]
   var until = now - 8.64e4 * days + '' // 8.64e4sec = 1days なぜか文字列じゃないと動かないので型変換している
