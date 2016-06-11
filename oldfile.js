@@ -1,7 +1,7 @@
 /**************************************************
-oldfile.gs 指定したチャンネルの古いファイルを検出します。
-+ 追加予定機能
-  + 古いファイルの削除(ファイルが消えても問題ない雑談チャンネル向け)
+oldfile.gs 指定したチャンネルの古いファイルを検出・削除します。
+ファイルが消えても問題ない雑談チャンネル向け。
+
 **************************************************/
 
 /* 雑談チャンネル・グループの名称を検索して古いファイルの検索に使用 */
@@ -16,13 +16,13 @@ function FileExecuter(){
   }
 }
 
-/* 特定日数より以前のファイルを検出 */
-function getOldFile(Name) {
+/* 特定日数より以前のファイルを削除 */
+function deleteOldFile(Name) {
   var channelId = channelNametoId(Name);
   if(!channelId) channelId = groupNametoId(Name); //チャンネルで該当なしであればグループを探す
   if(!channelId) return -1; //グループでもなければ終了
 
-  var days = 30;  // 遡る日数(ユーザが指定)
+  var days = 40;  // 遡る日数(ユーザが指定)
   var date = new Date();
   var now = Math.floor(date.getTime()/ 1000); // unixtime[second]
   var until = now - 8.64e4 * days + '' // 8.64e4sec = 1days なぜか文字列じゃないと動かないので型変換している
@@ -31,8 +31,7 @@ function getOldFile(Name) {
   var file_num = slackApp.filesList({channel: channelId, ts_to: until}).files.length;
   for(var i=0;i<file_num;++i){
     var fileId = slackApp.filesList({channel: channelId, ts_to: until}).files[i].id;
-    var fileName = slackApp.filesList({channel: channelId, ts_to: until}).files[i].name;
-    Logger.log(fileId + " : " + fileName);
+    deleteFile("fileId");
   }
 }
 
