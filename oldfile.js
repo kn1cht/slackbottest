@@ -23,7 +23,7 @@ function oldFileExecuter(){
 }
 
 /* 指定チャンネル内・特定日数より以前のファイルを削除 */
-function deleteOldFile(name,days) {
+function deleteOldFile(days, name) {
   var channelId = channelNametoId(name);
   if(!channelId) channelId = groupNametoId(name); //チャンネルで該当なしであればグループを探す
   if(!channelId) return -1; //グループでもなければ終了
