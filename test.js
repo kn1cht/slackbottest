@@ -23,7 +23,7 @@ function getChannelInfo() {
 }
 
 function getGroupInfo() {
-  Logger.log(slackApp.groupsList(false).groups.length);
+  Logger.log(slackApp.groupsList().groups.length);
   for(var i=0;i<slackApp.groupsList().groups.length;++i){
     var groupId = slackApp.groupsList().groups[i].id;
     var groupName = slackApp.groupsList().groups[i].name;

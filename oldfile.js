@@ -35,6 +35,7 @@ function deleteOldFile(days, name) {
   Logger.log("----------Fetching file list...----------");
   var file_num = slackApp.filesList({channel: channelId, ts_to: until}).files.length;
   for(var i=0;i<file_num;++i){
+    Logger.log(slackApp.filesList({channel: channelId, ts_to: until}).files[i].id);
     var fileId = slackApp.filesList({channel: channelId, ts_to: until}).files[i].id;
     filesDelete(fileId);
   }
@@ -42,9 +43,9 @@ function deleteOldFile(days, name) {
 
 /* チャンネル名を検索してIDを取得 */
 function channelNametoId(Name) {
-  for(var i=0;i<slackApp.channelsList(0).channels.length;++i){
-    var channelId = slackApp.channelsList(0).channels[i].id;
-    var channelName = slackApp.channelsList(0).channels[i].name;
+  for(var i=0;i<slackApp.channelsList().channels.length;++i){
+    var channelId = slackApp.channelsList().channels[i].id;
+    var channelName = slackApp.channelsList().channels[i].name;
     if (channelName === Name){
       Logger.log("Channel found named " + channelName + " : " + channelId);
       return channelId;
