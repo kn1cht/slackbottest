@@ -10,6 +10,7 @@ calendar.gs Google Calendarに指定された予定を自動で登録します�
 # ToDo
 + 現状順番の変更には非対応
 + エラーメッセージを出すように
++ イベントの削除(IDを使えば可能?)
 **************************************************/
 
 function calendarTest(){
@@ -17,15 +18,13 @@ function calendarTest(){
 }
 
 function calendarBot(text, channel_name){ // ToDo: コマンド引数を解析する、各メソッドに必要な情報を渡す
-  var res;
   var args = text.split(" ");
   var is_allday = !(args[3] / 1 || args[4] / 1); // if allday event : true
   args[1] = '[#' + channel_name + ']' + args[1]; // title
   if(is_allday)
-    res = createCalendarAlldayEvent(args[1], args[2], args[5], args[6], channel_name);
+    return createCalendarAlldayEvent(args[1], args[2], args[5], args[6], channel_name);
   else
-    res = createCalendarEvent(args[1], args[2], args[3], args[4], args[5], args[6]);
-  return res;
+    return createCalendarEvent(args[1], args[2], args[3], args[4], args[5], args[6]);
 }
 
 function createCalendarEvent(title, date, time, duration, location, description){
@@ -42,13 +41,13 @@ Logger.log(start_date.toString());
     location: location,
     description: description
   };
-
   cal.createEvent(options.title, options.sdate, options.edate, {description: options.description, location: options.location});
-  return 'OK :+1: created *' + options.title +
-    '* (' + options.description + ')' +
-      ' from ' + options.sdate.toString() +
-      ' to ' + options.edate.toString() +
-      ' at ' + options.location;
+
+  var res = 'OK :+1: created *' + options.title + "*";
+  if(description) res += ' (' + options.description + ')';
+  res += ' from ' + options.sdate.toString() + ' to ' + options.edate.toString();
+  if(location) res + ' at ' + options.location;
+  return res;
 }
 
 function createCalendarAlldayEvent(title, date, location, description){
@@ -61,8 +60,10 @@ function createCalendarAlldayEvent(title, date, location, description){
     description: description
   };
   cal.createAllDayEvent(options.title, options.date, {description: options.description, location: options.location});
-  return 'OK :+1: created *' + options.title +
-    '* (' + options.description + ')' +
-      ' *all day* on ' + options.date.toString() +
-      ' at ' + options.location;
+
+  var res = 'OK :+1: created *' + options.title + "*";
+  if(description) res += ' (' + options.description + ')';
+  res += ' *all day* on ' + options.date.toString();
+  if(location) res + ' at ' + options.location;
+  return res;
 }
